@@ -31,34 +31,24 @@ jobs:
       - name: Pack (macOS)
         if: matrix.target.os == 'macos-latest'
         run: |
-          mv target/${{ matrix.target.name }}/ci-release/<NAME> .
-          zip <NAME>-${{ matrix.target.name }}.zip <NAME>
+          mv target/${{ matrix.target.name }}/ci-release/auto-merge .
+          zip auto-merge-${{ matrix.target.name }}.zip auto-merge
       - name: Pack (Windows)
         if: matrix.target.os == 'windows-latest'
         run: |
-          mv target/${{ matrix.target.name }}/ci-release/<NAME>.exe .
-          Compress-Archive -Path <NAME>.exe -DestinationPath <NAME>-${{ matrix.target.name }}.zip
+          mv target/${{ matrix.target.name }}/ci-release/auto-merge.exe .
+          Compress-Archive -Path auto-merge.exe -DestinationPath auto-merge-${{ matrix.target.name }}.zip
       - name: Pack (Linux)
         if: matrix.target.os == 'ubuntu-latest'
         run: |
-          mv target/${{ matrix.target.name }}/ci-release/<NAME> .
-          tar -czvf <NAME>-${{ matrix.target.name }}.tar.gz <NAME>
+          mv target/${{ matrix.target.name }}/ci-release/auto-merge .
+          tar -czvf auto-merge-${{ matrix.target.name }}.tar.gz auto-merge
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          name: <NAME>-${{ matrix.target.name }}
-          path: <NAME>-${{ matrix.target.name }}.*
+          name: auto-merge-${{ matrix.target.name }}
+          path: auto-merge-${{ matrix.target.name }}.*
           retention-days: 1
-
-  # staging:
-  #   name: Staging
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - name: Publish
-  #       uses: softprops/action-gh-release@v2
-  #       with:
-  #         discussion_category_name: Announcements
-  #         generate_release_notes: true
 
   staging:
     name: Staging
@@ -73,7 +63,7 @@ jobs:
       - name: Hash
         run: |
           mkdir -p artifacts
-          mv <NAME>-*/* artifacts/
+          mv auto-merge-*/* artifacts/
           cd artifacts
           sha256sum * | tee ../SHA256
           md5sum * | tee ../MD5
