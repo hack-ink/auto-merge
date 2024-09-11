@@ -1,0 +1,26 @@
+name: Daily Auto Merge
+
+on:
+  schedule:
+    - cron: '0 0 * * *'  # Runs every day at midnight UTC
+
+jobs:
+  auto-merge:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Download latest auto-merge binary
+        run: |
+          wget https://github.com/hack-ink/auto-merge/releases/latest/download/auto-merge-x86_64-unknown-linux-gnu.tar.gz
+          tar -xvf auto-merge-x86_64-unknown-linux-gnu.tar.gz
+          chmod +x auto-merge
+
+      - name: Merge pull requests for repositories
+        run: |
+          REPOS=("repo1" "repo2" "repo3")  # Add your repository names here
+          for REPO in "${REPOS[@]}"; do
+            ./auto-merge "$REPO"
+          done
