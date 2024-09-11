@@ -14,7 +14,7 @@ use reqwew::{
 		header::{HeaderMap, AUTHORIZATION, USER_AGENT},
 		ClientBuilder,
 	},
-	Client, Http, Response,
+	Client as RClient, Http, Response,
 };
 use serde_json::Value;
 
@@ -41,7 +41,7 @@ impl Cli {
 	pub async fn run(&self) -> Result<()> {
 		let Cli { repository } = self;
 		let gh_tk = env::var("GITHUB_TOKEN")?;
-		let c = C::new(&gh_tk)?;
+		let c = Client::new(&gh_tk)?;
 
 		for (number, sha, title) in c.list_pull_requests(repository).await? {
 			println!("checking: {title}");
@@ -66,8 +66,8 @@ fn styles() -> Styles {
 }
 
 #[derive(Debug)]
-struct C(Client);
-impl C {
+struct Client(RClient);
+impl Client {
 	fn new(github_token: &str) -> Result<Self> {
 		let c = ClientBuilder::new()
 			.default_headers(HeaderMap::from_iter([
