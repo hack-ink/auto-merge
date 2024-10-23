@@ -29,4 +29,4 @@ clap       = { version = "4.5", features = ["derive"] }
 color-eyre = { version = "0.6" }
 reqwew     = { version = "0.3" }
 serde_json = { version = "1.0" }
-tokio      = { version = "1.4", features = ["macros", "rt-multi-thread"] }
+tokio      = { version = "1.41", features = ["macros", "rt-multi-thread"] }
